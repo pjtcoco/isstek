@@ -1,0 +1,30 @@
+import { theme } from "./theme";
+
+export const container = {
+  maxWidth: 1280,
+  margin: "0 auto",
+  padding: "0 1.5rem",
+};
+
+export const section = (bg = theme.colors.bgLight) => ({
+  padding: "clamp(4rem, 8vw, 7rem) 1.5rem",
+  background: bg,
+});
+
+export const grid = (cols = 2) => ({
+  display: "grid",
+  gridTemplateColumns: `repeat(${cols}, 1fr)`,
+  gap: "2rem",
+});
+
+export const buttonPrimary = {
+  background: theme.colors.accent,
+  color: "#fff",
+  fontWeight: 700,
+  border: `2px solid ${theme.colors.accent}`,
+  padding: "0.9rem 2rem",
+  borderRadius: theme.radius.sm,
+  cursor: "pointer",
+  transition: "0.25s",
+  textDecoration: "none",
+};
