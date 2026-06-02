@@ -1,61 +1,50 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { createDoc } from "../services/dbService";
 import { theme } from "../../theme";
+import { usePrograms } from "../hooks/usePrograms";
 
 export default function EnrollmentForm({ onClose }) {
+  const { programs } = usePrograms();
+
   const [form, setForm] = useState({
     name: "",
     email: "",
     phone: "",
     program: "",
+    level: "",
   });
 
-  const [errors, setErrors] = useState({});
+  const selectedProgram = programs.find((p) => p.name === form.program);
 
-  // ✅ LIST OF AVAILABLE PROGRAMS (EDIT THIS LIST ANYTIME)
-  const programs = [
-    "Informatique",
-    "Génie Logiciel",
-    "Réseaux & Télécommunications",
-    "Cybersécurité",
-    "Électronique",
-    "Génie Civil",
-    "Management",
-    "Comptabilité",
-  ];
+  const availableLevels = useMemo(() => {
+    return selectedProgram?.levels || [];
+  }, [selectedProgram]);
 
-  // ✅ EMAIL VALIDATION
-  const isValidEmail = (email) => {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-  };
+  const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
-  // ✅ PHONE VALIDATION (international safe)
-  const isValidPhone = (phone) => {
-    return /^[0-9+]{8,15}$/.test(phone);
-  };
-
-  const validate = () => {
-    const e = {};
-
-    if (!form.name.trim()) e.name = "Nom requis";
-
-    if (!isValidEmail(form.email)) e.email = "Email invalide";
-
-    if (!isValidPhone(form.phone)) e.phone = "Numéro invalide";
-
-    if (!form.program) e.program = "Veuillez choisir une filière";
-
-    return e;
-  };
+  const validatePhone = (phone) => /^[0-9+\s()-]{8,20}$/.test(phone);
 
   const handleSubmit = async () => {
-    const e = validate();
-    if (Object.keys(e).length > 0) {
-      setErrors(e);
+    if (
+      !form.name ||
+      !form.email ||
+      !form.phone ||
+      !form.program ||
+      !form.level
+    ) {
+      alert("Tous les champs sont obligatoires");
       return;
     }
 
-    setErrors({});
+    if (!validateEmail(form.email)) {
+      alert("Email invalide");
+      return;
+    }
+
+    if (!validatePhone(form.phone)) {
+      alert("Numéro invalide");
+      return;
+    }
 
     await createDoc("enrollments", {
       ...form,
@@ -70,51 +59,64 @@ export default function EnrollmentForm({ onClose }) {
   return (
     <div style={overlay}>
       <div style={modal}>
-        <h2>Formulaire d'inscription</h2>
+        <h2>Inscription</h2>
 
         {/* NAME */}
         <input
           placeholder="Nom complet"
-          value={form.name}
           onChange={(e) => setForm({ ...form, name: e.target.value })}
           style={input}
         />
-        {errors.name && <small style={error}>{errors.name}</small>}
 
         {/* EMAIL */}
         <input
           placeholder="Email"
-          value={form.email}
           onChange={(e) => setForm({ ...form, email: e.target.value })}
           style={input}
         />
-        {errors.email && <small style={error}>{errors.email}</small>}
 
         {/* PHONE */}
         <input
-          placeholder="Téléphone (ex: 677123456)"
-          value={form.phone}
+          placeholder="Téléphone"
           onChange={(e) => setForm({ ...form, phone: e.target.value })}
           style={input}
         />
-        {errors.phone && <small style={error}>{errors.phone}</small>}
 
-        {/* PROGRAM DROPDOWN */}
+        {/* PROGRAM */}
         <select
           value={form.program}
-          onChange={(e) => setForm({ ...form, program: e.target.value })}
+          onChange={(e) =>
+            setForm({
+              ...form,
+              program: e.target.value,
+              level: "",
+            })
+          }
           style={input}
         >
-          <option value="">-- Choisir une filière --</option>
+          <option value="">Choisir une filière</option>
           {programs.map((p) => (
-            <option key={p} value={p}>
-              {p}
+            <option key={p.id} value={p.name}>
+              {p.name}
             </option>
           ))}
         </select>
-        {errors.program && <small style={error}>{errors.program}</small>}
 
-        {/* BUTTONS */}
+        {/* LEVEL (FILTERED AUTOMATICALLY) */}
+        <select
+          value={form.level}
+          onChange={(e) => setForm({ ...form, level: e.target.value })}
+          style={input}
+          disabled={!form.program}
+        >
+          <option value="">Choisir un niveau</option>
+          {availableLevels.map((lvl) => (
+            <option key={lvl} value={lvl}>
+              {lvl}
+            </option>
+          ))}
+        </select>
+
         <button onClick={handleSubmit} style={btn}>
           Envoyer
         </button>
@@ -127,8 +129,7 @@ export default function EnrollmentForm({ onClose }) {
   );
 }
 
-/* ───────── STYLES ───────── */
-
+/* STYLES */
 const overlay = {
   position: "fixed",
   inset: 0,
@@ -145,7 +146,7 @@ const modal = {
   width: 420,
   display: "flex",
   flexDirection: "column",
-  gap: "8px",
+  gap: "10px",
 };
 
 const input = {
@@ -160,8 +161,6 @@ const btn = {
   padding: "10px",
   border: "none",
   borderRadius: 8,
-  marginTop: "10px",
-  cursor: "pointer",
 };
 
 const closeBtn = {
@@ -169,10 +168,4 @@ const closeBtn = {
   color: "red",
   border: "none",
   marginTop: "5px",
-  cursor: "pointer",
-};
-
-const error = {
-  color: "red",
-  fontSize: "0.75rem",
 };

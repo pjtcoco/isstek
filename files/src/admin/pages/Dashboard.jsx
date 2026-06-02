@@ -32,78 +32,85 @@ export default function Dashboard() {
   ];
 
   return (
-    <div>
-      {/* HEADER ROW */}
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          marginBottom: "1.5rem",
-        }}
-      >
-        <h2
-          style={{
-            fontSize: "1.4rem",
-            fontWeight: 700,
-            color: COLORS.text,
-          }}
-        >
-          Tableau de bord
-        </h2>
+    <div style={styles.page}>
+      {/* HEADER */}
+      <div style={styles.header}>
+        <h2 style={styles.title}>Tableau de bord</h2>
 
-        {/* BACK BUTTON */}
-        <button
-          onClick={() => navigate("/")}
-          style={{
-            background: COLORS.primary,
-            color: "#fff",
-            border: "none",
-            padding: "10px 14px",
-            borderRadius: 8,
-            cursor: "pointer",
-            fontWeight: 600,
-          }}
-        >
+        <button onClick={() => navigate("/")} style={styles.button}>
           ← Retour au site
         </button>
       </div>
 
       {/* GRID */}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
-          gap: "1rem",
-        }}
-      >
+      <div style={styles.grid}>
         {cards.map((c) => (
-          <div
-            key={c.title}
-            style={{
-              background: COLORS.card,
-              border: `1px solid ${COLORS.border}`,
-              borderRadius: 12,
-              padding: "1.2rem",
-              boxShadow: COLORS.shadow,
-            }}
-          >
-            <div style={{ fontSize: "0.8rem", color: COLORS.muted }}>
-              {c.title}
-            </div>
-
-            <div
-              style={{
-                fontSize: "2rem",
-                fontWeight: 700,
-                color: c.color,
-              }}
-            >
-              {c.value}
-            </div>
+          <div key={c.title} style={styles.card}>
+            <div style={styles.cardTitle}>{c.title}</div>
+            <div style={{ ...styles.value, color: c.color }}>{c.value}</div>
           </div>
         ))}
       </div>
     </div>
   );
 }
+
+/* ───────── RESPONSIVE STYLES ───────── */
+
+const styles = {
+  page: {
+    padding: "clamp(1rem, 3vw, 2rem)",
+  },
+
+  header: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    flexWrap: "wrap", // 🔥 IMPORTANT for mobile
+    gap: "1rem",
+    marginBottom: "1.5rem",
+  },
+
+  title: {
+    fontSize: "clamp(1.2rem, 2vw, 1.6rem)",
+    fontWeight: 700,
+    margin: 0,
+    color: COLORS.text,
+  },
+
+  button: {
+    background: COLORS.primary,
+    color: "#fff",
+    border: "none",
+    padding: "10px 14px",
+    borderRadius: 8,
+    cursor: "pointer",
+    fontWeight: 600,
+    whiteSpace: "nowrap",
+  },
+
+  grid: {
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))",
+    gap: "1rem",
+  },
+
+  card: {
+    background: COLORS.card,
+    border: `1px solid ${COLORS.border}`,
+    borderRadius: 12,
+    padding: "clamp(1rem, 2vw, 1.2rem)",
+    boxShadow: COLORS.shadow,
+  },
+
+  cardTitle: {
+    fontSize: "0.8rem",
+    color: COLORS.muted,
+    marginBottom: "0.5rem",
+  },
+
+  value: {
+    fontSize: "clamp(1.5rem, 3vw, 2rem)",
+    fontWeight: 700,
+  },
+};

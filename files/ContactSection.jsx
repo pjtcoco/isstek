@@ -1,5 +1,7 @@
 import { useState } from "react";
+import emailjs from "@emailjs/browser";
 import { theme } from "./theme";
+import { createDoc } from "./src/services/dbService";
 
 const T = {
   fr: {
@@ -11,11 +13,8 @@ const T = {
     hours: "Lundi – Vendredi : 07h30 – 18h00\nSamedi : 08h00 – 14h00",
     hoursLabel: "HORAIRES D'ACCUEIL",
     fName: "NOM COMPLET",
-    fNamePh: "Votre nom complet",
     fEmail: "ADRESSE EMAIL",
-    fEmailPh: "votre@email.com",
     fMsg: "MESSAGE",
-    fMsgPh: "Comment pouvons-nous vous aider ?",
     fSubmit: "ENVOYER LE MESSAGE →",
     fSending: "ENVOI EN COURS...",
     successTitle: "MESSAGE ENVOYÉ !",
@@ -24,32 +23,11 @@ const T = {
     required: "Champ requis",
     invalidEmail: "Email invalide",
   },
-  en: {
-    label: "CONTACT US",
-    title: "Let's Talk\nAbout Your Future.",
-    phones: ["677 699 402 / 699 101 557", "698 942 412 / 676 343 066"],
-    email: "isstek@gmail.com",
-    address: "Yaoundé-Etoug-Ebé, Opposite Collège de l'Espérance",
-    hours: "Monday – Friday: 7:30am – 6:00pm\nSaturday: 8:00am – 2:00pm",
-    hoursLabel: "OFFICE HOURS",
-    fName: "FULL NAME",
-    fNamePh: "Your full name",
-    fEmail: "EMAIL ADDRESS",
-    fEmailPh: "your@email.com",
-    fMsg: "MESSAGE",
-    fMsgPh: "How can we help you?",
-    fSubmit: "SEND MESSAGE →",
-    fSending: "SENDING...",
-    successTitle: "MESSAGE SENT!",
-    successSub: "We will reply within 48 hours.",
-    errorMsg: "Send failed.",
-    required: "Required",
-    invalidEmail: "Invalid email",
-  },
 };
 
 export default function ContactSection({ lang }) {
-  const t = T[lang];
+  // ✅ SAFE FALLBACK (fixes your crash)
+  const t = T[lang] || T.fr;
 
   const [form, setForm] = useState({ name: "", email: "", message: "" });
   const [errors, setErrors] = useState({});
@@ -57,25 +35,59 @@ export default function ContactSection({ lang }) {
 
   const validate = () => {
     const e = {};
+
     if (!form.name.trim()) e.name = t.required;
-    if (!form.email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/))
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(form.email)) {
       e.email = t.invalidEmail;
+    }
+
     if (!form.message.trim()) e.message = t.required;
+
     return e;
   };
 
   const handleSubmit = async () => {
+    if (status === "loading") return; // prevent spam clicks
+
     const e = validate();
-    if (Object.keys(e).length) return setErrors(e);
+    if (Object.keys(e).length > 0) {
+      setErrors(e);
+      return;
+    }
 
     setErrors({});
     setStatus("loading");
 
     try {
-      await new Promise((r) => setTimeout(r, 900));
+      // 1. Save to Firestore
+      await createDoc("contactMessages", {
+        name: form.name,
+        email: form.email,
+        message: form.message,
+        status: "new",
+        createdAt: new Date().toISOString(),
+      });
+
+      // 2. Send email via EmailJS
+      await emailjs.send(
+        "service_o3vkzlv",
+        "template_qtpa9e2",
+        {
+          from_name: form.name,
+          from_email: form.email,
+          message: form.message,
+          reply_to: form.email,
+          to_email: "zonemelicorineleslie@gmail.com",
+        },
+        "2FgsyzmHZGEsyiTCk",
+      );
+
       setStatus("success");
       setForm({ name: "", email: "", message: "" });
-    } catch {
+    } catch (err) {
+      console.error("EmailJS Error:", err);
       setStatus("error");
     }
   };
@@ -89,15 +101,6 @@ export default function ContactSection({ lang }) {
     borderRadius: 6,
     outline: "none",
     color: theme.text,
-  };
-
-  const lbl = {
-    fontSize: "0.65rem",
-    color: theme.textMuted,
-    letterSpacing: "0.12em",
-    fontWeight: 700,
-    marginBottom: "0.4rem",
-    display: "block",
   };
 
   const errStyle = {
@@ -125,20 +128,13 @@ export default function ContactSection({ lang }) {
       >
         {/* LEFT */}
         <div>
-          <div
-            style={{
-              fontSize: "0.65rem",
-              color: theme.primary,
-              fontWeight: 700,
-            }}
-          >
+          <div style={{ fontSize: "0.65rem", color: theme.primary }}>
             — {t.label}
           </div>
 
           <h2
             style={{
               fontSize: "clamp(2rem, 4vw, 3.5rem)",
-              fontFamily: "'Playfair Display', serif",
               whiteSpace: "pre-line",
               lineHeight: 1.1,
               marginBottom: "2rem",
@@ -147,120 +143,41 @@ export default function ContactSection({ lang }) {
           >
             {t.title}
           </h2>
-
-          <div style={{ display: "grid", gap: "0.9rem", marginBottom: "2rem" }}>
-            {[
-              { icon: "📞", text: t.phones[0] },
-              { icon: "📞", text: t.phones[1] },
-              { icon: "✉️", text: t.email },
-              { icon: "📍", text: t.address },
-            ].map((item, i) => (
-              <div key={i} style={{ display: "flex", gap: "0.7rem" }}>
-                <span>{item.icon}</span>
-                <span style={{ color: theme.textSoft, fontSize: "0.9rem" }}>
-                  {item.text}
-                </span>
-              </div>
-            ))}
-          </div>
-
-          <div
-            style={{
-              padding: "1.2rem",
-              background: "#fff",
-              borderRadius: 8,
-              border: `1px solid ${theme.border}`,
-            }}
-          >
-            <div
-              style={{
-                fontSize: "0.65rem",
-                color: theme.primary,
-                fontWeight: 700,
-              }}
-            >
-              {t.hoursLabel}
-            </div>
-            <div
-              style={{
-                fontSize: "0.85rem",
-                color: theme.textSoft,
-                whiteSpace: "pre-line",
-                lineHeight: 1.7,
-              }}
-            >
-              {t.hours}
-            </div>
-          </div>
         </div>
 
         {/* FORM */}
         <div>
           {status === "success" ? (
-            <div
-              style={{
-                padding: "2.5rem",
-                textAlign: "center",
-                background: "#ecfdf5",
-                borderRadius: 8,
-                border: "1px solid #bbf7d0",
-              }}
-            >
-              <div style={{ fontSize: "2.5rem" }}>✅</div>
-              <h3
-                style={{
-                  fontFamily: "'Playfair Display', serif",
-                  color: "#166534",
-                }}
-              >
-                {t.successTitle}
-              </h3>
-              <p style={{ color: theme.textSoft }}>{t.successSub}</p>
+            <div style={{ padding: "2rem", textAlign: "center" }}>
+              <h3>✅ {t.successTitle}</h3>
+              <p>{t.successSub}</p>
             </div>
           ) : (
             <div style={{ display: "grid", gap: "1rem" }}>
-              <div>
-                <label style={lbl}>{t.fName}</label>
-                <input
-                  style={{
-                    ...inp,
-                    borderColor: errors.name ? "#dc2626" : theme.border,
-                  }}
-                  value={form.name}
-                  onChange={(e) => setForm({ ...form, name: e.target.value })}
-                />
-                {errors.name && <div style={errStyle}>{errors.name}</div>}
-              </div>
+              <input
+                placeholder={t.fName}
+                style={inp}
+                value={form.name}
+                onChange={(e) => setForm({ ...form, name: e.target.value })}
+              />
+              {errors.name && <div style={errStyle}>{errors.name}</div>}
 
-              <div>
-                <label style={lbl}>{t.fEmail}</label>
-                <input
-                  style={{
-                    ...inp,
-                    borderColor: errors.email ? "#dc2626" : theme.border,
-                  }}
-                  value={form.email}
-                  onChange={(e) => setForm({ ...form, email: e.target.value })}
-                />
-                {errors.email && <div style={errStyle}>{errors.email}</div>}
-              </div>
+              <input
+                placeholder={t.fEmail}
+                style={inp}
+                value={form.email}
+                onChange={(e) => setForm({ ...form, email: e.target.value })}
+              />
+              {errors.email && <div style={errStyle}>{errors.email}</div>}
 
-              <div>
-                <label style={lbl}>{t.fMsg}</label>
-                <textarea
-                  rows={5}
-                  style={{
-                    ...inp,
-                    resize: "vertical",
-                    borderColor: errors.message ? "#dc2626" : theme.border,
-                  }}
-                  value={form.message}
-                  onChange={(e) =>
-                    setForm({ ...form, message: e.target.value })
-                  }
-                />
-                {errors.message && <div style={errStyle}>{errors.message}</div>}
-              </div>
+              <textarea
+                rows={5}
+                placeholder={t.fMsg}
+                style={inp}
+                value={form.message}
+                onChange={(e) => setForm({ ...form, message: e.target.value })}
+              />
+              {errors.message && <div style={errStyle}>{errors.message}</div>}
 
               <button
                 onClick={handleSubmit}
@@ -268,11 +185,10 @@ export default function ContactSection({ lang }) {
                 style={{
                   background: theme.primary,
                   color: "#fff",
-                  border: "none",
                   padding: "1rem",
+                  border: "none",
                   borderRadius: 6,
-                  fontWeight: 700,
-                  cursor: "pointer",
+                  cursor: status === "loading" ? "not-allowed" : "pointer",
                   opacity: status === "loading" ? 0.6 : 1,
                 }}
               >
@@ -280,7 +196,7 @@ export default function ContactSection({ lang }) {
               </button>
 
               {status === "error" && (
-                <div style={{ color: "#dc2626", fontSize: "0.75rem" }}>
+                <div style={{ color: "red", fontSize: "0.8rem" }}>
                   {t.errorMsg}
                 </div>
               )}

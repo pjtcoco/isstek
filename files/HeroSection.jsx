@@ -25,6 +25,10 @@ export default function HeroSection({ lang }) {
   const t = T[lang];
   const [open, setOpen] = useState(false);
 
+  // hover states
+  const [hoverEnroll, setHoverEnroll] = useState(false);
+  const [hoverPrograms, setHoverPrograms] = useState(false);
+
   return (
     <>
       <section
@@ -68,6 +72,7 @@ export default function HeroSection({ lang }) {
             {t.sub}
           </p>
 
+          {/* BUTTONS */}
           <div
             style={{
               marginTop: "2rem",
@@ -76,26 +81,44 @@ export default function HeroSection({ lang }) {
               flexWrap: "wrap",
             }}
           >
+            {/* ENROLL BUTTON */}
             <a
               onClick={() => setOpen(true)}
+              onMouseEnter={() => setHoverEnroll(true)}
+              onMouseLeave={() => setHoverEnroll(false)}
               style={{
-                background: theme.primary,
+                background: hoverEnroll ? theme.primaryHover : theme.primary,
                 color: "#fff",
                 padding: "0.8rem 1.5rem",
                 textDecoration: "none",
                 cursor: "pointer",
+                borderRadius: 8,
+                transition: "0.25s ease",
+                transform: hoverEnroll ? "translateY(-2px)" : "translateY(0)",
+                boxShadow: hoverEnroll ? theme.shadow : "none",
+                display: "inline-block",
               }}
             >
               {t.cta1}
             </a>
 
+            {/* PROGRAMS BUTTON (BRIGHTER + FIXED CONTRAST) */}
             <a
               href="#programs"
+              onMouseEnter={() => setHoverPrograms(true)}
+              onMouseLeave={() => setHoverPrograms(false)}
               style={{
-                border: `1px solid ${theme.primary}`,
-                color: theme.primary,
+                background: hoverPrograms ? theme.primary : "#ffffff",
+                color: hoverPrograms ? "#ffffff" : theme.primary,
                 padding: "0.8rem 1.5rem",
                 textDecoration: "none",
+                fontWeight: 700,
+                borderRadius: 8,
+                transition: "0.25s ease",
+                transform: hoverPrograms ? "translateY(-2px)" : "translateY(0)",
+                boxShadow: hoverPrograms ? theme.shadow : "none",
+                border: `1px solid ${theme.primary}`,
+                display: "inline-block",
               }}
             >
               {t.cta2}
@@ -104,7 +127,7 @@ export default function HeroSection({ lang }) {
         </div>
       </section>
 
-      {/* ✅ MODAL MUST BE HERE */}
+      {/* MODAL */}
       {open && <EnrollmentForm onClose={() => setOpen(false)} />}
     </>
   );

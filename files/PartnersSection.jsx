@@ -49,19 +49,9 @@ export default function PartnersSection({ lang }) {
         padding: "clamp(4rem, 8vw, 6rem) 1.5rem",
       }}
     >
-      <div
-        style={{
-          maxWidth: 1280,
-          margin: "0 auto",
-        }}
-      >
-        {/* Heading */}
-        <div
-          style={{
-            textAlign: "center",
-            marginBottom: "3rem",
-          }}
-        >
+      <div style={{ maxWidth: 1280, margin: "0 auto" }}>
+        {/* HEADER */}
+        <div style={{ textAlign: "center", marginBottom: "3rem" }}>
           <div
             style={{
               fontSize: "0.65rem",
@@ -87,11 +77,11 @@ export default function PartnersSection({ lang }) {
           </h2>
         </div>
 
-        {/* Partners Grid */}
+        {/* GRID */}
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
+            gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))",
             gap: "1.5rem",
           }}
         >
@@ -102,35 +92,33 @@ export default function PartnersSection({ lang }) {
                 background: "rgba(255,255,255,0.04)",
                 border: "1px solid rgba(255,255,255,0.08)",
                 borderRadius: 12,
-                padding: "1.75rem 1rem",
+                padding: "1.5rem 1rem",
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
                 justifyContent: "center",
                 gap: "1rem",
                 transition: "all 0.25s ease",
-                cursor: "default",
               }}
-              onMouseOver={(e) => {
+              onMouseEnter={(e) => {
                 e.currentTarget.style.borderColor = theme.primary;
-                e.currentTarget.style.background = "rgba(15, 76, 129, 0.12)";
                 e.currentTarget.style.transform = "translateY(-4px)";
+                e.currentTarget.style.background = "rgba(10, 77, 162, 0.15)";
               }}
-              onMouseOut={(e) => {
+              onMouseLeave={(e) => {
                 e.currentTarget.style.borderColor = "rgba(255,255,255,0.08)";
-                e.currentTarget.style.background = "rgba(255,255,255,0.04)";
                 e.currentTarget.style.transform = "translateY(0)";
+                e.currentTarget.style.background = "rgba(255,255,255,0.04)";
               }}
             >
               <img
                 src={partner.img}
                 alt={partner.name}
+                loading="lazy"
                 style={{
                   height: 60,
                   maxWidth: "100%",
                   objectFit: "contain",
-                  filter: "brightness(0) invert(1)",
-                  opacity: 0.9,
                 }}
                 onError={(e) => {
                   e.currentTarget.style.display = "none";
@@ -142,7 +130,6 @@ export default function PartnersSection({ lang }) {
                   fontSize: "0.78rem",
                   color: theme.textMuted,
                   textAlign: "center",
-                  lineHeight: 1.5,
                   fontWeight: 500,
                 }}
               >
