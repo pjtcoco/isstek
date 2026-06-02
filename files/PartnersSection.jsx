@@ -12,18 +12,12 @@ const T = {
 };
 
 const PARTNERS = [
-  {
-    name: "UIT de Bandjoun",
-    img: "https://isstek.org/images/IUT_Banjoun.PNG",
-  },
+  { name: "UIT de Bandjoun", img: "https://isstek.org/images/IUT_Banjoun.PNG" },
   {
     name: "Ontario Technologies",
     img: "https://isstek.org/images/ontario_tech.PNG",
   },
-  {
-    name: "UCLouvain",
-    img: "https://isstek.org/images/UCL.PNG",
-  },
+  { name: "UCLouvain", img: "https://isstek.org/images/UCL.PNG" },
   {
     name: "Université Libre de Bruxelles",
     img: "https://isstek.org/images/ULB.PNG",
@@ -111,20 +105,33 @@ export default function PartnersSection({ lang }) {
                 e.currentTarget.style.background = "rgba(255,255,255,0.04)";
               }}
             >
-              <img
-                src={partner.img}
-                alt={partner.name}
-                loading="lazy"
+              {/* IMAGE WRAPPER (FIXED) */}
+              <div
                 style={{
-                  height: 60,
-                  maxWidth: "100%",
-                  objectFit: "contain",
+                  width: "100%",
+                  height: 80,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
                 }}
-                onError={(e) => {
-                  e.currentTarget.style.display = "none";
-                }}
-              />
+              >
+                <img
+                  src={partner.img}
+                  alt={partner.name}
+                  loading="lazy"
+                  style={{
+                    maxWidth: "100%",
+                    maxHeight: "100%",
+                    objectFit: "contain",
+                    display: "block",
+                  }}
+                  onError={(e) => {
+                    e.currentTarget.style.display = "none";
+                  }}
+                />
+              </div>
 
+              {/* NAME */}
               <div
                 style={{
                   fontSize: "0.78rem",
