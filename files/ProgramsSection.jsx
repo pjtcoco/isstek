@@ -107,13 +107,7 @@ export default function ProgramsSection({ lang }) {
         </div>
 
         {/* GRID */}
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(3, 1fr)",
-            gap: "1.5rem",
-          }}
-        >
+        <div className="programs-grid">
           {t.programs.map((prog, i) => (
             <div
               key={i}
@@ -141,14 +135,7 @@ export default function ProgramsSection({ lang }) {
                     aspectRatio: "4/3",
                     objectFit: "cover",
                     display: "block",
-                    transition: "transform 0.4s ease",
                   }}
-                  onMouseOver={(e) =>
-                    (e.currentTarget.style.transform = "scale(1.05)")
-                  }
-                  onMouseOut={(e) =>
-                    (e.currentTarget.style.transform = "scale(1)")
-                  }
                 />
 
                 <div
@@ -161,7 +148,6 @@ export default function ProgramsSection({ lang }) {
                     padding: "0.3rem 0.7rem",
                     fontSize: "0.6rem",
                     fontWeight: 700,
-                    letterSpacing: "0.08em",
                     borderRadius: 3,
                   }}
                 >
@@ -185,7 +171,11 @@ export default function ProgramsSection({ lang }) {
               </div>
 
               {/* CONTENT */}
-              <div style={{ padding: "1.5rem" }}>
+              <div
+                style={{
+                  padding: "1.5rem",
+                }}
+              >
                 <h3
                   style={{
                     fontFamily: "'Playfair Display', serif",
@@ -242,7 +232,6 @@ export default function ProgramsSection({ lang }) {
                     fontSize: "0.78rem",
                     fontWeight: 700,
                     textDecoration: "none",
-                    letterSpacing: "0.05em",
                   }}
                 >
                   {t.learnMore}
@@ -253,17 +242,29 @@ export default function ProgramsSection({ lang }) {
         </div>
       </div>
 
-      {/* RESPONSIVE STYLES */}
+      {/* RESPONSIVE GRID FIX */}
       <style>{`
+        .programs-grid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 1.5rem;
+        }
+
         @media (max-width: 1024px) {
-          div[style*="repeat(3, 1fr)"] {
-            grid-template-columns: repeat(2, 1fr) !important;
+          .programs-grid {
+            grid-template-columns: repeat(2, 1fr);
           }
         }
 
         @media (max-width: 768px) {
-          div[style*="repeat(2, 1fr)"] {
-            grid-template-columns: 1fr !important;
+          .programs-grid {
+            grid-template-columns: 1fr;
+            gap: 1rem;
+          }
+
+          /* better mobile spacing */
+          .programs-grid div {
+            padding: 0;
           }
         }
       `}</style>
