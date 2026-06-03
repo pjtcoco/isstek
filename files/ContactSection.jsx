@@ -23,10 +23,29 @@ const T = {
     required: "Champ requis",
     invalidEmail: "Email invalide",
   },
+
+  en: {
+    label: "CONTACT US",
+    title: "Let’s Talk About\nYour Future.",
+    phones: ["677 699 402 / 699 101 557", "698 942 412 / 676 343 066"],
+    email: "isstek@gmail.com",
+    address: "Yaoundé-Etoug-Ebé, Opposite College of Hope",
+    hours: "Monday – Friday: 07:30 – 18:00\nSaturday: 08:00 – 14:00",
+    hoursLabel: "OPENING HOURS",
+    fName: "FULL NAME",
+    fEmail: "EMAIL ADDRESS",
+    fMsg: "MESSAGE",
+    fSubmit: "SEND MESSAGE →",
+    fSending: "SENDING...",
+    successTitle: "MESSAGE SENT!",
+    successSub: "We will reply within 48 hours.",
+    errorMsg: "Error sending message.",
+    required: "Required field",
+    invalidEmail: "Invalid email",
+  },
 };
 
 export default function ContactSection({ lang }) {
-  // ✅ SAFE FALLBACK (fixes your crash)
   const t = T[lang] || T.fr;
 
   const [form, setForm] = useState({ name: "", email: "", message: "" });
@@ -49,7 +68,7 @@ export default function ContactSection({ lang }) {
   };
 
   const handleSubmit = async () => {
-    if (status === "loading") return; // prevent spam clicks
+    if (status === "loading") return;
 
     const e = validate();
     if (Object.keys(e).length > 0) {
@@ -61,7 +80,6 @@ export default function ContactSection({ lang }) {
     setStatus("loading");
 
     try {
-      // 1. Save to Firestore
       await createDoc("contactMessages", {
         name: form.name,
         email: form.email,
@@ -70,7 +88,6 @@ export default function ContactSection({ lang }) {
         createdAt: new Date().toISOString(),
       });
 
-      // 2. Send email via EmailJS
       await emailjs.send(
         "service_o3vkzlv",
         "template_qtpa9e2",
@@ -87,7 +104,7 @@ export default function ContactSection({ lang }) {
       setStatus("success");
       setForm({ name: "", email: "", message: "" });
     } catch (err) {
-      console.error("EmailJS Error:", err);
+      console.error(err);
       setStatus("error");
     }
   };
