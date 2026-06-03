@@ -1,6 +1,13 @@
 import { theme } from "./theme";
 import { useNavigate } from "react-router-dom";
 
+import {
+  FaFacebookF,
+  FaInstagram,
+  FaLinkedinIn,
+  FaYoutube,
+} from "react-icons/fa";
+
 const T = {
   fr: {
     tagline: "Institut Supérieur des Sciences et Technologies Kouam",
@@ -18,6 +25,7 @@ const T = {
     rights: "© 2025 ISSTEK. Tous droits réservés.",
     credit: "Redesigné avec React + Firebase",
   },
+
   en: {
     tagline: "Kouam Higher Institute of Science and Technology",
     quickLinks: "QUICK LINKS",
@@ -41,34 +49,54 @@ export default function Footer({ lang }) {
   const navigate = useNavigate();
 
   const socials = [
-    { label: "FB", href: "https://facebook.com" },
-    { label: "IG", href: "#" },
-    { label: "LI", href: "#" },
-    { label: "YT", href: "#" },
+    {
+      icon: <FaFacebookF />,
+      href: "https://facebook.com",
+      color: "#1877F2",
+    },
+    {
+      icon: <FaInstagram />,
+      href: "https://instagram.com",
+      color: "#E4405F",
+    },
+    {
+      icon: <FaLinkedinIn />,
+      href: "https://linkedin.com",
+      color: "#0A66C2",
+    },
+    {
+      icon: <FaYoutube />,
+      href: "https://youtube.com",
+      color: "#FF0000",
+    },
   ];
-
   const linkStyle = {
     display: "block",
     fontSize: "0.82rem",
     color: theme.textMuted,
     textDecoration: "none",
     marginBottom: "0.5rem",
-    transition: "0.2s",
+    transition: "0.25s ease",
   };
 
   return (
     <footer
       style={{
         background: theme.bgDark,
-        padding: "clamp(3rem, 5vw, 4.5rem) 1.5rem 2rem",
+        padding: "clamp(3rem,5vw,4.5rem) 1.5rem 2rem",
       }}
     >
-      <div style={{ maxWidth: 1280, margin: "0 auto" }}>
+      <div
+        style={{
+          maxWidth: 1280,
+          margin: "0 auto",
+        }}
+      >
         {/* GRID */}
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
+            gridTemplateColumns: "repeat(auto-fit,minmax(220px,1fr))",
             gap: "2.5rem",
             marginBottom: "3rem",
           }}
@@ -78,55 +106,63 @@ export default function Footer({ lang }) {
             <div
               style={{
                 fontFamily: "'Playfair Display', serif",
-                fontSize: "1.2rem",
+                fontSize: "1.35rem",
                 color: "#fff",
-                marginBottom: "0.4rem",
+                marginBottom: ".5rem",
               }}
             >
               ISSTEK
             </div>
-
             <p
               style={{
-                fontSize: "0.78rem",
+                fontSize: ".82rem",
                 color: theme.textMuted,
-                lineHeight: 1.7,
-                marginBottom: "1.2rem",
+                lineHeight: 1.8,
+                marginBottom: "1.5rem",
               }}
             >
               {t.tagline}
             </p>
-
-            {/* SOCIALS */}
-            <div style={{ display: "flex", gap: "0.5rem" }}>
-              {socials.map((s) => (
+            ```jsx
+            {/* SOCIAL ICONS */}
+            <div
+              style={{
+                display: "flex",
+                gap: ".75rem",
+              }}
+            >
+              {socials.map((s, index) => (
                 <a
-                  key={s.label}
+                  key={index}
                   href={s.href}
                   target="_blank"
                   rel="noopener noreferrer"
                   style={{
-                    width: 34,
-                    height: 34,
+                    width: 42,
+                    height: 42,
                     borderRadius: "50%",
-                    background: "rgba(255,255,255,0.06)",
+                    background: "rgba(255,255,255,0.08)",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    color: theme.textMuted,
-                    fontSize: "0.65rem",
-                    fontWeight: 700,
-                    transition: "0.2s",
+                    color: "#fff",
+                    fontSize: "1rem",
+                    transition: "all .35s ease",
+                    textDecoration: "none",
                   }}
-                  onMouseOver={(e) =>
-                    (e.currentTarget.style.background = theme.primary)
-                  }
-                  onMouseOut={(e) =>
-                    (e.currentTarget.style.background =
-                      "rgba(255,255,255,0.06)")
-                  }
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.background = s.color;
+                    e.currentTarget.style.transform =
+                      "translateY(-4px) scale(1.08)";
+                    e.currentTarget.style.boxShadow = `0 12px 30px ${s.color}66`;
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.background = "rgba(255,255,255,0.08)";
+                    e.currentTarget.style.transform = "translateY(0) scale(1)";
+                    e.currentTarget.style.boxShadow = "none";
+                  }}
                 >
-                  {s.label}
+                  {s.icon}
                 </a>
               ))}
             </div>
@@ -136,9 +172,9 @@ export default function Footer({ lang }) {
           <div>
             <div
               style={{
-                fontSize: "0.6rem",
+                fontSize: ".65rem",
                 color: theme.primary,
-                letterSpacing: "0.15em",
+                letterSpacing: ".15em",
                 fontWeight: 700,
                 marginBottom: "1rem",
               }}
@@ -156,8 +192,8 @@ export default function Footer({ lang }) {
                 key={l.label}
                 href={l.href}
                 style={linkStyle}
-                onMouseOver={(e) => (e.currentTarget.style.color = "#fff")}
-                onMouseOut={(e) =>
+                onMouseEnter={(e) => (e.currentTarget.style.color = "#fff")}
+                onMouseLeave={(e) =>
                   (e.currentTarget.style.color = theme.textMuted)
                 }
               >
@@ -166,13 +202,13 @@ export default function Footer({ lang }) {
             ))}
           </div>
 
-          {/* EXTRA LINKS */}
+          {/* EXTRA */}
           <div>
             <div
               style={{
-                fontSize: "0.6rem",
+                fontSize: ".65rem",
                 color: theme.primary,
-                letterSpacing: "0.15em",
+                letterSpacing: ".15em",
                 fontWeight: 700,
                 marginBottom: "1rem",
               }}
@@ -185,8 +221,8 @@ export default function Footer({ lang }) {
                 key={text}
                 href="#"
                 style={linkStyle}
-                onMouseOver={(e) => (e.currentTarget.style.color = "#fff")}
-                onMouseOut={(e) =>
+                onMouseEnter={(e) => (e.currentTarget.style.color = "#fff")}
+                onMouseLeave={(e) =>
                   (e.currentTarget.style.color = theme.textMuted)
                 }
               >
@@ -194,7 +230,6 @@ export default function Footer({ lang }) {
               </a>
             ))}
 
-            {/* ADMIN FIXED LINK */}
             <a
               href="/admin"
               onClick={(e) => {
@@ -205,11 +240,8 @@ export default function Footer({ lang }) {
                 ...linkStyle,
                 color: theme.primary,
                 fontWeight: 700,
+                marginTop: "1rem",
               }}
-              onMouseOver={(e) =>
-                (e.currentTarget.style.color = theme.primaryHover)
-              }
-              onMouseOut={(e) => (e.currentTarget.style.color = theme.primary)}
             >
               🔐 {t.adminLink}
             </a>
@@ -219,9 +251,9 @@ export default function Footer({ lang }) {
           <div>
             <div
               style={{
-                fontSize: "0.6rem",
+                fontSize: ".65rem",
                 color: theme.primary,
-                letterSpacing: "0.15em",
+                letterSpacing: ".15em",
                 fontWeight: 700,
                 marginBottom: "1rem",
               }}
@@ -238,9 +270,9 @@ export default function Footer({ lang }) {
               <div
                 key={c}
                 style={{
-                  fontSize: "0.82rem",
+                  fontSize: ".82rem",
                   color: theme.textMuted,
-                  marginBottom: "0.4rem",
+                  marginBottom: ".45rem",
                 }}
               >
                 {c}
@@ -257,14 +289,24 @@ export default function Footer({ lang }) {
             display: "flex",
             justifyContent: "space-between",
             flexWrap: "wrap",
-            gap: "0.5rem",
+            gap: ".5rem",
           }}
         >
-          <span style={{ fontSize: "0.7rem", color: theme.textMuted }}>
+          <span
+            style={{
+              fontSize: ".75rem",
+              color: theme.textMuted,
+            }}
+          >
             {t.rights}
           </span>
 
-          <span style={{ fontSize: "0.7rem", color: theme.textMuted }}>
+          <span
+            style={{
+              fontSize: ".75rem",
+              color: theme.textMuted,
+            }}
+          >
             Corine Leslie Zone Meli · {t.credit}
           </span>
         </div>
