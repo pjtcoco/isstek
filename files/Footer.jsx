@@ -123,7 +123,7 @@ export default function Footer({ lang }) {
             >
               {t.tagline}
             </p>
-            ```jsx
+
             {/* SOCIAL ICONS */}
             <div
               style={{
