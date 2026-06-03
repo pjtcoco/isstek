@@ -265,7 +265,7 @@ export default function Footer({ lang }) {
           </span>
 
           <span style={{ fontSize: "0.7rem", color: theme.textMuted }}>
-            WICOM AGENCY · {t.credit}
+            Corine Leslie Zone Meli · {t.credit}
           </span>
         </div>
       </div>
