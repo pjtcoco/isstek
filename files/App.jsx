@@ -14,6 +14,8 @@ import ContactSection from "./ContactSection.jsx";
 import Footer from "./Footer.jsx";
 import AdminApp from "./src/admin/AdminApp.jsx";
 import { useAuth } from "../files/src/hooks/useAuth.js";
+import Programs from "./programs/programs.jsx";
+import ProgramDetails from "./programs/ProgramDetails.jsx";
 /* ───────── PUBLIC HOME ───────── */
 
 function Home({ lang, setLang }) {
@@ -56,6 +58,9 @@ export default function App() {
             </ProtectedRoute>
           }
         />
+        <Route path="/programs" element={<Programs />} />
+
+        <Route path="/programs/:slug" element={<ProgramDetails />} />
       </Routes>
     </BrowserRouter>
   );

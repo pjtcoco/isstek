@@ -11,6 +11,7 @@ const T = {
     cta: "CE QUE NOUS VOUS PROPOSONS",
     founded: "FONDÉ",
   },
+
   en: {
     label: "ABOUT US",
     title: "Who Are We?",
@@ -30,40 +31,40 @@ export default function AboutSection({ lang }) {
     <section
       id="about"
       style={{
-        padding: "clamp(4rem, 6vw, 7rem) 1.5rem",
+        padding: "clamp(4rem,6vw,7rem) 1.5rem",
         background: theme.bgLight,
       }}
     >
       <div
         style={{
-          maxWidth: 1200,
+          maxWidth: 1300,
           margin: "0 auto",
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
-          gap: "clamp(2rem, 5vw, 5rem)",
+          gridTemplateColumns: "repeat(auto-fit,minmax(340px,1fr))",
+          gap: "4rem",
           alignItems: "center",
         }}
       >
-        {/* TEXT */}
+        {/* LEFT CONTENT */}{" "}
         <div>
           <div
             style={{
-              fontSize: "0.65rem",
+              fontSize: ".7rem",
               color: theme.primary,
-              letterSpacing: "0.22em",
+              letterSpacing: ".2em",
               fontWeight: 700,
-              marginBottom: "0.6rem",
+              marginBottom: ".8rem",
             }}
           >
-            — {t.label}
+            — {t.label}{" "}
           </div>
 
           <h2
             style={{
               fontFamily: "'Playfair Display', serif",
-              fontSize: "clamp(2rem, 4vw, 3.6rem)",
-              color: "#111827",
+              fontSize: "clamp(2rem,4vw,3.8rem)",
               lineHeight: 1.1,
+              color: theme.text,
               marginBottom: "1.5rem",
             }}
           >
@@ -72,32 +73,29 @@ export default function AboutSection({ lang }) {
 
           <p
             style={{
-              fontSize: "clamp(0.95rem, 1.2vw, 1rem)",
               color: theme.textSoft,
-              lineHeight: 1.8,
-              marginBottom: "1.5rem",
+              lineHeight: 1.9,
+              marginBottom: "1.8rem",
             }}
           >
             {t.body}
           </p>
 
-          {/* DECREE */}
           <div
             style={{
               padding: "1rem 1.2rem",
               background: `${theme.primary}10`,
               borderLeft: `4px solid ${theme.primary}`,
+              borderRadius: 6,
               marginBottom: "1.5rem",
-              borderRadius: 4,
             }}
           >
             <div
               style={{
-                fontSize: "0.6rem",
                 color: theme.primary,
+                fontSize: ".7rem",
                 fontWeight: 700,
-                letterSpacing: "0.1em",
-                marginBottom: "0.3rem",
+                marginBottom: ".4rem",
               }}
             >
               {t.decreeLabel}
@@ -105,28 +103,22 @@ export default function AboutSection({ lang }) {
 
             <div
               style={{
-                fontSize: "0.8rem",
                 color: theme.textSoft,
                 lineHeight: 1.6,
+                fontSize: ".9rem",
               }}
             >
               {t.decree}
             </div>
           </div>
 
-          {/* LOCATION */}
           <div
             style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "0.5rem",
-              color: theme.textSoft,
-              fontSize: "0.85rem",
               marginBottom: "2rem",
+              color: theme.textSoft,
             }}
           >
-            <span>📍</span>
-            <span>{t.location}</span>
+            📍 {t.location}
           </div>
 
           <a
@@ -135,77 +127,143 @@ export default function AboutSection({ lang }) {
               display: "inline-block",
               background: theme.primary,
               color: "#fff",
-              fontWeight: 700,
-              fontSize: "0.75rem",
-              padding: "0.9rem 2rem",
+              padding: "1rem 2rem",
+              borderRadius: 8,
               textDecoration: "none",
-              letterSpacing: "0.1em",
-              borderRadius: 6,
-              border: `2px solid ${theme.primary}`,
-              transition: "all 0.25s ease",
-            }}
-            onMouseOver={(e) => {
-              e.currentTarget.style.background = theme.primaryHover;
-            }}
-            onMouseOut={(e) => {
-              e.currentTarget.style.background = theme.primary;
+              fontWeight: 700,
             }}
           >
             {t.cta}
           </a>
         </div>
-
-        {/* IMAGE */}
-        <div style={{ position: "relative" }}>
-          <img
-            src="https://isstek.org/images/isstek1.jpg"
-            alt="Campus ISSTEK"
-            style={{
-              width: "100%",
-              aspectRatio: "4/3",
-              objectFit: "cover",
-              borderRadius: 8,
-              boxShadow: "0 20px 50px rgba(0,0,0,0.12)",
-            }}
-            onError={(e) => {
-              e.currentTarget.style.display = "none";
-            }}
-          />
-
-          {/* FOUNDED BADGE */}
+        {/* RIGHT SIDE */}
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "1.5rem",
+          }}
+        >
+          {/* CAMPUS IMAGE */}
           <div
             style={{
-              position: "absolute",
-              bottom: "-1rem",
-              left: "-1rem",
-              background: theme.primary,
-              color: "#fff",
-              padding: "1rem 1.2rem",
-              borderRadius: 8,
-              boxShadow: "0 10px 25px rgba(59,130,246,0.35)",
+              position: "relative",
+              borderRadius: 20,
+              overflow: "hidden",
+              background: "#fff",
+              boxShadow: "0 20px 50px rgba(0,0,0,.12)",
             }}
           >
-            <div
+            <img
+              src="https://isstek.org/images/isstek1.jpg"
+              alt="Campus ISSTEK"
               style={{
-                fontFamily: "'Playfair Display', serif",
-                fontSize: "1.6rem",
-                fontWeight: 700,
-                lineHeight: 1,
+                width: "100%",
+                height: "auto",
+                display: "block",
               }}
-            >
-              2020
-            </div>
+            />
 
             <div
               style={{
-                fontSize: "0.6rem",
-                letterSpacing: "0.1em",
-                fontWeight: 700,
-                marginTop: "0.2rem",
+                position: "absolute",
+                bottom: 20,
+                left: 20,
+                background: theme.primary,
+                color: "#fff",
+                padding: "1rem 1.2rem",
+                borderRadius: 12,
+                boxShadow: "0 10px 30px rgba(0,0,0,.25)",
               }}
             >
-              {t.founded}
+              <div
+                style={{
+                  fontSize: "2rem",
+                  fontWeight: 800,
+                  lineHeight: 1,
+                }}
+              >
+                2020
+              </div>
+
+              <div
+                style={{
+                  fontSize: ".7rem",
+                  marginTop: ".3rem",
+                  letterSpacing: ".1em",
+                }}
+              >
+                {t.founded}
+              </div>
             </div>
+          </div>
+
+          {/* VIDEO */}
+          <div
+            style={{
+              borderRadius: 20,
+              overflow: "hidden",
+              boxShadow: "0 20px 50px rgba(0,0,0,.12)",
+              background: "#000",
+            }}
+          >
+            {/* <video
+              controls
+              preload="metadata"
+              poster="https://isstek.org/images/isstek1.jpg"
+              style={{
+                width: "100%",
+                display: "block",
+              }}
+            >
+              <source src="/videos/isstek-campus.mp4" type="video/mp4" />
+            </video> */}
+          </div>
+
+          {/* STATS */}
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(3,1fr)",
+              gap: "1rem",
+            }}
+          >
+            {[
+              ["5000+", "Étudiants"],
+              ["20+", "Filières"],
+              ["95%", "Insertion"],
+            ].map(([value, label]) => (
+              <div
+                key={label}
+                style={{
+                  background: "#fff",
+                  borderRadius: 14,
+                  padding: "1rem",
+                  textAlign: "center",
+                  border: `1px solid ${theme.border}`,
+                }}
+              >
+                <div
+                  style={{
+                    color: theme.primary,
+                    fontSize: "1.4rem",
+                    fontWeight: 800,
+                  }}
+                >
+                  {value}
+                </div>
+
+                <div
+                  style={{
+                    color: theme.textSoft,
+                    fontSize: ".8rem",
+                    marginTop: ".3rem",
+                  }}
+                >
+                  {label}
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </div>
